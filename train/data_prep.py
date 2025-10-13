@@ -7,11 +7,11 @@ from pathlib import Path
 # =========================
 # CONFIG
 # =========================
-DATA_DIR = Path("../data")
-OUTPUT_DIR = Path("../data_prepared")
+DATA_DIR = Path("/workspace/data")
+OUTPUT_DIR = Path("/workspace/data_prepared")
 
 # Use "hed" or "canny"
-EDGE_METHOD = "hed"
+EDGE_METHOD = "canny"
 
 # Optional: Resize all images for consistency (Pix2Pix expects same size)
 TARGET_SIZE = (256, 256)
@@ -20,20 +20,36 @@ TARGET_SIZE = (256, 256)
 # HED Edge Detector Setup
 # =========================
 def load_hed_model():
-    proto_url = "https://github.com/opencv/opencv_extra/raw/master/testdata/dnn/hed_deploy.prototxt"
-    weights_url = "https://github.com/opencv/opencv_extra/raw/master/testdata/dnn/hed_pretrained_bsds.caffemodel"
+    import urllib.request
 
-    proto_path = "hed_deploy.prototxt"
-    weights_path = "hed_pretrained_bsds.caffemodel"
+    proto_url = "https://raw.githubusercontent.com/s9xie/hed/master/examples/hed/deploy.prototxt"
+    weights_url = "https://pjreddie.com/media/files/hed_pretrained_bsds.caffemodel"
 
-    if not os.path.exists(proto_path):
-        import urllib.request
-        print("Downloading HED model...")
-        urllib.request.urlretrieve(proto_url, proto_path)
-        urllib.request.urlretrieve(weights_url, weights_path)
-    return cv2.dnn.readNetFromCaffe(proto_path, weights_path)
+    proto_path = "/workspace/train/hed_deploy.prototxt"
+    weights_path = "/workspace/train/hed_pretrained_bsds.caffemodel"
+
+    if not os.path.exists(proto_path) or not os.path.exists(weights_path):
+        print("Downloading HED model (~100MB total)...")
+        try:
+            urllib.request.urlretrieve(proto_url, proto_path)
+            urllib.request.urlretrieve(weights_url, weights_path)
+        except Exception as e:
+            print(f"Failed to download HED model: {e}")
+            return None
+
+    print("Loading HED model...")
+    try:
+        net = cv2.dnn.readNetFromCaffe(proto_path, weights_path)
+        return net
+    except Exception as e:
+        print(f"Failed to load HED model: {e}")
+        return None
+    
 
 hed_net = load_hed_model() if EDGE_METHOD == "hed" else None
+if EDGE_METHOD == "hed" and hed_net is None:
+    print("⚠️ Falling back to Canny edge detection because HED failed to load.")
+    EDGE_METHOD = "canny"
 
 
 # =========================
