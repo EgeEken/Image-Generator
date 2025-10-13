@@ -1,0 +1,44 @@
+version: "3.8"
+services:
+  mlflow:
+    image: python:3.10-slim
+    container_name: mlflow-server
+    working_dir: /app
+    command: >
+      bash -lc "pip install mlflow && \
+               mlflow server \
+                 --backend-store-uri sqlite:///mlflow/mlflow.db \
+                 --default-artifact-root /mlflow/mlruns \
+                 --host 0.0.0.0 \
+                 --port 5000"
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./mlflow:/mlflow
+    environment:
+      - MLFLOW_TRACKING_USERNAME= # optional
+    restart: unless-stopped
+
+  trainer:
+    build: .
+    container_name: pix2pix-trainer
+    runtime: nvidia
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
+    # For compose v2+ you can use 'gpus: all' instead of runtime/deploy stanza:
+    # gpus: all
+    environment:
+      - MLFLOW_TRACKING_URI=http://mlflow:5000
+      - MLFLOW_EXPERIMENT_NAME=birds_pix2pix_turbo
+    volumes:
+      - ./data:/workspace/data        # mount your dataset here
+      - ./mlflow:/workspace/mlflow    # MLflow artifact / mlruns storage
+      - ./:/workspace                 # mount repo for code access
+    depends_on:
+      - mlflow
+    command: bash -lc "python train/train.py --data_dir /workspace/data --output_dir /workspace/outputs"
+    shm_size: "1g"
+    # restart: on-failure

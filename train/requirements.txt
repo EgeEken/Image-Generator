@@ -1,0 +1,8 @@
+torch
+torchvision
+tqdm
+pillow
+opencv-python
+mlflow
+albumentations
+numpy
