@@ -1,0 +1,14 @@
+artifact_uri: file:///c:/Users/EGE/Desktop/Coding/Personal%20Projects/Completed%20Projects/AI/Sketch%202%20Image/Image-Generator/train/mlruns/0/6cfa4680abe54ff2abbea565433b5b07/artifacts
+end_time: 1760401425258
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 6cfa4680abe54ff2abbea565433b5b07
+run_name: awesome-panda-202
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760399957601
+status: 3
+tags: []
+user_id: egeek

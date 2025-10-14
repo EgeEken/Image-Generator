@@ -1,0 +1,14 @@
+artifact_uri: file:///c:/Users/EGE/Desktop/Coding/Personal%20Projects/Completed%20Projects/AI/Sketch%202%20Image/Image-Generator/train/mlruns/0/5e9e0ec4e6e442718a1630b62cbddf9e/artifacts
+end_time: 1760399537907
+entry_point_name: ''
+experiment_id: '0'
+lifecycle_stage: active
+run_id: 5e9e0ec4e6e442718a1630b62cbddf9e
+run_name: dapper-fawn-218
+source_name: ''
+source_type: 4
+source_version: ''
+start_time: 1760399514287
+status: 3
+tags: []
+user_id: egeek
