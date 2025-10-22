@@ -1,27 +1,28 @@
+# ==========================
 # Dockerfile
-FROM pytorch/pytorch:2.2.0-cuda11.8-cudnn8-runtime
+# ==========================
+FROM pytorch/pytorch:2.4.0-cuda12.1-cudnn9-runtime
 
-# avoid interactive dialogs
-ENV DEBIAN_FRONTEND=noninteractive
-
-# create app dir
+# Set working directory
 WORKDIR /workspace
 
-# Copy training code early to leverage docker cache
-COPY train/ ./train/
+# Copy project files
+COPY . /workspace
 
-# Install system deps if needed
-RUN apt-get update && apt-get install -y --no-install-recommends \
-    git \
-    ffmpeg \
-    && rm -rf /var/lib/apt/lists/*
+# Install Python dependencies
+RUN pip install --no-cache-dir \
+    mlflow \
+    tqdm \
+    opencv-python \
+    torchvision \
+    pillow \
+    matplotlib \
+    fastapi \
+    uvicorn \
+    numpy
 
-# Install pip requirements
-RUN pip install --upgrade pip
-RUN pip --no-cache-dir install -r train/requirements.txt
+# Optional: make MLflow accessible inside container
+ENV MLFLOW_TRACKING_URI=file:/workspace/mlruns
 
-# Create data and mlflow mounts
-VOLUME ["/workspace/data", "/workspace/mlflow"]
-
-# default command for interactive run (override in docker-compose)
-CMD ["bash"]
+# Expose MLflow port
+EXPOSE 5000
