@@ -1,5 +1,6 @@
 /mlflow/mlruns/
 /mlflow/mlflow.db
+/mlruns/
 /train/
 __pycache__/
 *.pyc
