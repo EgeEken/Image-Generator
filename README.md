@@ -1,4 +1,9 @@
-# Image Generator
+# Sketch to Image Generator
+
+A custom pix2pix GAN model that generates photographs of birds from a user's input sketch, locally trained and run. Dataset from Kaggle, Training with PyTorch, Containerized with Docker, Monitored with MLflow.
+
+## README BELOW IS FROM THE OLD VERSION FROM 2022
+### It is completely outdated, i'm only keeping it as a placeholder until i write a new one for the new version
 
 This is an AI Image Generator, similar to (although obviously not nearly at the level of) img2img functionality of Stable Diffusion, as well as many other AI Image generator/editors.
 
