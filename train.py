@@ -12,7 +12,6 @@ from tqdm import tqdm
 import torch
 import torch.nn as nn
 from torch.utils.data import Dataset, DataLoader, Subset
-import torchvision.utils as vutils
 import mlflow
 
 # -----------------------------
@@ -236,6 +235,7 @@ def train(
     print(f"MLflow run ID: {run_id}")
     artifact_root = Path(mlflow.get_artifact_uri()).resolve()
     mlflow.log_params({
+        "dataset_path": f"{input_dir}",
         "epochs": epochs, "batch_size": batch_size, "image_size": image_size,
         "gen_base_features": gen_base_features, "gen_depth": gen_depth, "gen_lr": gen_lr, "gen_wd": gen_wd,
         "disc_base_features": disc_base_features, "disc_depth": disc_depth, "disc_lr": disc_lr, "disc_wd": disc_wd,
@@ -350,7 +350,11 @@ def train(
             save_tensor_image(exp_img, sample_dir / "expected_output.png")
 
         mlflow.log_artifacts(str(samples_dir), artifact_path=f"samples/epoch_{epoch+1}")
-        shutil.rmtree(samples_dir)
+        # log the first sample output.png (samples/epoch_{epoch+1}/sample1/output.png) as main sample of the epoch, save it as output_epoch{epoch+1}.png
+        # cant use artifact_path to name it, that would create a folder
+        first_sample_output = samples_dir / "sample1" / "output.png"
+        mlflow.log_artifact(str(first_sample_output))
+        shutil.rmtree(artifact_root)
 
         # schedulers
         sched_G.step(); sched_D.step()
@@ -366,14 +370,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--input_dir", type=str, default=str(base/"data_prepared"/"overfit"/"inputs"))
     parser.add_argument("--target_dir", type=str, default=str(base/"data_prepared"/"overfit"/"targets"))
-    parser.add_argument("--epochs", type=int, default=15)
+    parser.add_argument("--epochs", type=int, default=20)
     parser.add_argument("--batch_size", type=int, default=4)
     parser.add_argument("--image_size", type=int, nargs=2, default=(256,256))
-    parser.add_argument("--gen_base_features", type=int, default=256)
-    parser.add_argument("--gen_depth", type=int, default=3)
-    parser.add_argument("--gen_lr", type=float, default=2e-4)
-    parser.add_argument("--gen_wd", type=float, default=1e-2)
-    parser.add_argument("--disc_base_features", type=int, default=256)
+    parser.add_argument("--gen_base_features", type=int, default=2048)
+    parser.add_argument("--gen_depth", type=int, default=4)
+    parser.add_argument("--gen_lr", type=float, default=1e-3)
+    parser.add_argument("--gen_wd", type=float, default=1e-3)
+    parser.add_argument("--disc_base_features", type=int, default=64)
     parser.add_argument("--disc_depth", type=int, default=3)
     parser.add_argument("--disc_lr", type=float, default=1e-4)
     parser.add_argument("--disc_wd", type=float, default=1e-2)
