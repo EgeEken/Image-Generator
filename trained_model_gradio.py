@@ -73,10 +73,10 @@ class UNetGenerator(nn.Module):
 # 2. Load the trained generator
 # --------------------------------------------------------
 device = "cuda" if torch.cuda.is_available() else "cpu"
-model_path = "overfitted_generator_model.pth"  # adjust if needed
+model_path = "valid_generator_model.pth"  # adjust if needed
 G = UNetGenerator().to(device)
 state_dict = torch.load(model_path, map_location=device)
-G.load_state_dict(state_dict, strict=False)
+G.load_state_dict(state_dict, strict=True)
 G.eval()
 
 # --------------------------------------------------------
