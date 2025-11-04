@@ -98,21 +98,21 @@ def generate_from_sketch(img):
     """
     # Resize and convert to grayscale 0–1 tensor
     rgba = Image.fromarray(img["layers"][0]).convert("RGBA")
-    white_bg = Image.new("RGBA", rgba.size, (255, 255, 255, 255))
-    rgba_on_white = Image.alpha_composite(white_bg, rgba)
+    black_bg = Image.new("RGBA", rgba.size, (0, 0, 0, 255))
+    rgba_on_black = Image.alpha_composite(black_bg, rgba)
 
     # show the image for debugging
-    #rgba_on_white.show()
+    #rgba_on_black.show()
 
     # Convert to grayscale and resize for the model
-    gray = rgba_on_white.convert("L").resize((128, 128))
+    gray = rgba_on_black.convert("L").resize((128, 128))
     x = to_tensor(gray).unsqueeze(0).to(device)
 
     with torch.no_grad():
-        out = G(x).clamp(0, 1)
+        out = G(x).squeeze(0).cpu().clamp(0, 1)
 
     # Convert tensor → PIL
-    out_img = to_pil(out[0].cpu())
+    out_img = to_pil(out)
     return out_img
 
 # --------------------------------------------------------
@@ -122,7 +122,7 @@ interface = gr.Interface(
     fn=generate_from_sketch,
     inputs=gr.Sketchpad(
         label="Draw your sketch",
-        brush=gr.Brush(default_size=2),
+        brush=gr.Brush(default_size=2, default_color="#FFFFFF", colors=["#FFFFFF"]),
         image_mode="RGBA",
     ),
     outputs=gr.Image(label="Generated Image", type="pil"),
