@@ -73,8 +73,10 @@ class UNetGenerator(nn.Module):
 # 2. Load the trained generator
 # --------------------------------------------------------
 device = "cuda" if torch.cuda.is_available() else "cpu"
-model_path = "valid_generator_model.pth"  # adjust if needed
-G = UNetGenerator().to(device)
+#model_path = "valid_generator_model.pth"
+#G = UNetGenerator().to(device)
+model_path = "full_trained_generator_model.pth"
+G = UNetGenerator(base_features=128).to(device)
 state_dict = torch.load(model_path, map_location=device)
 G.load_state_dict(state_dict, strict=True)
 G.eval()
@@ -121,11 +123,18 @@ def generate_from_sketch(img):
 interface = gr.Interface(
     fn=generate_from_sketch,
     inputs=gr.Sketchpad(
+        value={"background": Image.new("RGBA", (512, 512), (0, 0, 0, 255)),
+               "layers": None,
+               "composite": None},
+        height=512,
+        width=512,
         label="Draw your sketch",
         brush=gr.Brush(default_size=2, default_color="#FFFFFF", colors=["#FFFFFF"]),
         image_mode="RGBA",
     ),
-    outputs=gr.Image(label="Generated Image", type="pil"),
+    outputs=gr.Image(label="Generated Image",
+                     height=512, width=512,
+                     type="pil"),
     title="Sketch-to-Image Bird Image Generator",
     description="Draw a binary (black & white) sketch of a bird below and let the trained generator generate a photograph from it.",
     allow_flagging="never",

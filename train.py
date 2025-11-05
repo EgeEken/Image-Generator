@@ -433,12 +433,12 @@ def train(
 if __name__ == "__main__":
     base = Path(__file__).resolve().parent
     parser = argparse.ArgumentParser()
-    parser.add_argument("--input_dir", type=str, default=str(base/"data_prepared"/"valid"/"inputs"))
-    parser.add_argument("--target_dir", type=str, default=str(base/"data_prepared"/"valid"/"targets"))
-    parser.add_argument("--epochs", type=int, default=100)
+    parser.add_argument("--input_dir", type=str, default=str(base/"data_prepared"/"train"/"inputs"))
+    parser.add_argument("--target_dir", type=str, default=str(base/"data_prepared"/"train"/"targets"))
+    parser.add_argument("--epochs", type=int, default=200)
     parser.add_argument("--batch_size", type=int, default=32)
     parser.add_argument("--image_size", type=int, nargs=2, default=(128,128))
-    parser.add_argument("--gen_base_features", type=int, default=64)
+    parser.add_argument("--gen_base_features", type=int, default=128)
     parser.add_argument("--gen_depth", type=int, default=4)
     parser.add_argument("--gen_lr", type=float, default=2e-4)
     parser.add_argument("--gen_wd", type=float, default=0)
