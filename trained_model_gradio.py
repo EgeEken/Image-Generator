@@ -126,11 +126,11 @@ interface = gr.Interface(
         image_mode="RGBA",
     ),
     outputs=gr.Image(label="Generated Image", type="pil"),
-    title="Sketch-to-Image Generator",
-    description="Draw a binary (black & white) sketch below and let the trained generator colorize it.",
+    title="Sketch-to-Image Bird Image Generator",
+    description="Draw a binary (black & white) sketch of a bird below and let the trained generator generate a photograph from it.",
     allow_flagging="never",
     live=True,
 )
 
 if __name__ == "__main__":
-    interface.launch(share=True)
+    interface.launch(share=False)
