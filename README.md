@@ -12,3 +12,6 @@ This project was both to get a deeper understanding of image generation, and to 
 - Demo hosted on **[HuggingFace Spaces](https://huggingface.co/spaces/EgeEken/Bird_Sketch2Image)**
 
 https://github.com/user-attachments/assets/44773dd6-58b5-42d1-b725-3ad87ec9dea5
+
+## Example use case: Generating an image of a bird sitting on a table 
+<img width="1188" height="712" alt="image" src="https://github.com/user-attachments/assets/066024bf-ee03-40c9-bb2d-67900799501e" />
