@@ -13,5 +13,13 @@ This project was both to get a deeper understanding of image generation, and to 
 
 https://github.com/user-attachments/assets/44773dd6-58b5-42d1-b725-3ad87ec9dea5
 
-## Example use case: Generating an image of a bird sitting on a table 
+# Example use cases 
+
+## Generating an image of a bird sitting on a table 
 <img width="1188" height="712" alt="image" src="https://github.com/user-attachments/assets/066024bf-ee03-40c9-bb2d-67900799501e" />
+
+## Penguin Generator Model
+### Models can be trained on specific bird species to have more consistent/specific generation
+Or any type of image for that matter, it's a GAN.
+<img width="1167" height="554" alt="image" src="https://github.com/user-attachments/assets/02916fbb-a07a-4d7e-adcb-02c5cc73eea2" />
+(This specific penguin generator model in the repository as `penguin_generator-model.pth`
